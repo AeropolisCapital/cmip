@@ -4,50 +4,78 @@
 <body>
 <form id="myForm" action="javascript:testFunction()">
 <table>
+
+
 <tr>
 <td>Deal Country : </td>
 <td><input type="text" id="DealCountry" name="DealCountry" value="Canada"></td>
-<td>Deal Date : </td>
-<td><input type="text" id="DealDate" name="DealDate" value="2020"></td>
-</tr>
+
+
 <tr>
 <td>Deal Stage : </td>
 <td><input type="text" id="DealStage" name="DealStage" value="Unspecified Round"></td>
 </tr>
+
+
 <tr>
+
 <td>Main Industry : </td>
 <td><input type="text" id="MainIndustry" name="MainIndustry" value="Financial Services"></td>
+
 <td>Detailed Industry : </td>
 <td><input type="text" id="DetailedIndustry" name="DetailedIndustry" value="Accounting Services, Accounting/Finance Software, Analytics & Performance Software, Customer Relationship Management"></td>
+
 </tr>
+
+
 <tr>
+
 <td>Industry Vertical : </td>
 <td><input type="text" id="IndustryVertical" name="IndustryVertical" value="Cloud Computing, Deep Learning, FinTech, Financial Data, Machine Learning"></td>
+
 <td>Your Currency : </td>
 <td><input type="text" id="YourCurrency" name="YourCurrency" value="CAD"></td>
 </tr>
+
+
 <tr>
-<td>Deal Size In Your Currency : </td>
-<td><input type="text" id="DealSizeInYourCurrency" name="DealSizeInYourCurrency" value="20"></td>
-<td>Deal Size In USD Only : </td>
-<td><input type="text" id="DealSizeInUSDOnly" name="DealSizeInUSDOnly" value="15.29"></td>
+<td>Deal Size In Your Currency (In Millions): </td>
+<td><input type="text" id="DealSizeInYourCurrencyInMillions" name="DealSizeInYourCurrencyInMillions" value="20"></td>
+
+<td>Deal Size In USD Only (In Millions): </td>
+<td><input type="text" id="DealSizeInUSDOnlyInMillions" name="DealSizeInUSDOnlyInMillions" value="15.29"></td>
 </tr>
+
+
 <tr>
-<td>Company Incorporation Date : </td>
-<td><input type="text" id="CompanyIncorporationDate" name="CompanyIncorporationDate" value="2010"></td>
+<td>Investor Country</td>
+<td><input type="text" id="InvestorCountry" name="InvestorCountry" value="Canada"></td>
 </tr>
+
+
+
 <tr>
 <td>Company Revenue In Millions : </td>
-<td><input type="text" id="CompanyRevenueInMillions" name="CompanyRevenueInMillions" value=""></td>
+<td><input type="text" id="CompanyRevenueInMillions" name="CompanyRevenueInMillions" value="1"></td>
 <td>EBITDA In Your Currency In Millions : </td>
-<td><input type="text" id="EBITDAInYourCurrencyInMillions" name="EBITDAInYourCurrencyInMillions" value=""></td>
+<td><input type="text" id="EBITDAInYourCurrencyInMillions" name="EBITDAInYourCurrencyInMillions" value="0.2"></td>
 </tr>
-<tr>
 
+
+<tr>
 <td>Industry Classication : </td>
 <td><input type="text" id="IndustryClassication" name="IndustryClassication" value="Financial & Insurance Services"></td>
 </tr>
+
+
+<tr>
+<td>Company Age (In Years) : </td>
+<td><input type="text" id="CompanyAgeAtDealDateInYear" name="CompanyAgeAtDealDateInYear" value="2"></td>
+</tr>
+
 </table>
+
+
 <button onclick="myFunction(false)" style="margin-left: 18%;margin-top: 1%;margin-bottom: 1%;">Show Data Here</button>
 <button onclick="myFunction(true)">Download Data As CSV</button>
 </form>
@@ -58,21 +86,30 @@ function myFunction(downloadFlag) {
     var xmlHttp = new XMLHttpRequest();
     var objJSON = {
         "DealCountry": document.forms['myForm'].elements['DealCountry'].value.trim(),
-        "DealDate": document.forms['myForm'].elements['DealDate'].value.trim(),
         "DealStage": document.forms['myForm'].elements['DealStage'].value.trim(),
+        
         "MainIndustry": document.forms['myForm'].elements['MainIndustry'].value.trim(),
         "DetailedIndustry": document.forms['myForm'].elements['DetailedIndustry'].value.trim(),
         "IndustryVertical": document.forms['myForm'].elements['IndustryVertical'].value.trim(),
+        
+        
         "YourCurrency": document.forms['myForm'].elements['YourCurrency'].value.trim(),
-        "DealSizeInYourCurrency": document.forms['myForm'].elements['DealSizeInYourCurrency'].value.trim(),
-        "DealSizeInUSDOnly": document.forms['myForm'].elements['DealSizeInUSDOnly'].value.trim(),
-        "CompanyIncorporationDate": document.forms['myForm'].elements['CompanyIncorporationDate'].value.trim(),
+        "DealSizeInYourCurrencyInMillions": document.forms['myForm'].elements['DealSizeInYourCurrencyInMillions'].value.trim(),
+        
+        "DealSizeInUSDOnlyInMillions": document.forms['myForm'].elements['DealSizeInUSDOnlyInMillions'].value.trim(),
+        
+		"InvestorCountry": document.forms['myForm'].elements['InvestorCountry'].value.trim(),
+
+        
         "CompanyRevenueInMillions": document.forms['myForm'].elements['CompanyRevenueInMillions'].value.trim(),
         "EBITDAInYourCurrencyInMillions": document.forms['myForm'].elements['EBITDAInYourCurrencyInMillions'].value.trim(),
         "IndustryClassication": document.forms['myForm'].elements['IndustryClassication'].value.trim(),
+        
+        "CompanyAgeAtDealDateInYear": document.forms['myForm'].elements['CompanyAgeAtDealDateInYear'].value.trim(),
+
     };
 
-    xmlHttp.open("GET", "https://api.akk.io/api?flow_key=8uVPEmgNNfRRQ9BhikHb%2F1&api_key=e75875eb-1060-4bbc-926b-4662af8649c5&sample=true&data=[" + encodeURIComponent(JSON.stringify(objJSON)) + "]", false);
+    xmlHttp.open("GET", "https://api.akk.io/api?flow_key=FpW0DLfOGJuTnjxxKrqT/1&api_key=e75875eb-1060-4bbc-926b-4662af8649c5&sample=true&data=[" + encodeURIComponent(JSON.stringify(objJSON)) + "]", false);
     xmlHttp.send(null);
     var reponseJson = JSON.parse(xmlHttp.responseText);
     csvStr = '';
