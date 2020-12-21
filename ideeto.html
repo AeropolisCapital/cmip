@@ -1,0 +1,100 @@
+
+<html>  
+<head>
+</head>
+<body>
+<form id="myForm" action="javascript:testFunction()">
+<table>
+<tr>
+<td>API Key : </td>
+<td><input type="text" id="apiKey" name="apiKey" value="3f53a47c756bee09932e8d0f6fc19b0a610a28dedcb3ee1720d3400d2a60be5d" style="width: 500%;"></td> <br/>
+</tr>
+<tr>
+<td>Search Query : </td>
+<td><input type="text" id="searchQuery" name="searchQuery" value="site:www.linkedin.com/in -inurl:dir &quot;series 67&quot; AND &quot;investment banking&quot;" style="width: 500%;"></td>
+</tr>
+</table>
+<button onclick="submitFunction()" style="margin-left: 28%;margin-top: 1%;margin-bottom: 1%;">Submit</button>
+</form>
+<script>  
+
+function testFunction() { }
+
+function submitFunction() {
+
+var apiKey = document.forms['myForm'].elements['apiKey'].value.trim();
+var query = document.forms['myForm'].elements['searchQuery'].value.trim();
+var columnName = ["Name", "Linkedin URL", "Snippet Result"];
+var csvStr = columnName.join(",") + "\n";
+
+totalRecords = 0;
+
+csvStr1 = myFunction(1);
+csvStr += csvStr1;
+
+pageCnt = 51;
+
+totalPages = totalRecords / 50;
+
+for (j = 1; j < totalPages; j++) {
+    csvStr1 = myFunction(pageCnt);
+	if(csvStr1 == '') {
+		break;
+	}
+    csvStr += csvStr1;
+	pageCnt+=50;
+}
+
+function myFunction(pageCount) {
+	var url = '';
+	
+	if (pageCount === 1) {
+	  url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
+	}
+	else {
+	  url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
+	}
+	
+	csvStr1 = '';
+    var xmlHttp1 = new XMLHttpRequest();
+    xmlHttp1.open("GET", url, false);
+	xmlHttp1.setRequestHeader('Access-Control-Allow-Origin', '*');
+	xmlHttp1.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xmlHttp1.send();
+	if(xmlHttp1.status === 500) {
+		return csvStr1;
+	}
+    jsonResponse1 = JSON.parse(xmlHttp1.responseText);
+
+    if (pageCount === 1) {
+        totalRecords = jsonResponse1.search_information.total_results;
+    }
+
+    if (typeof jsonResponse1['organic_results'] !== 'undefined' && jsonResponse1['organic_results'].length > 0) {
+		for (i = 0; i < jsonResponse1['organic_results'].length; i++) {
+            result1 = jsonResponse1['organic_results'][i]['title'];
+            resultSplit1 = result1.split(" ");
+            var resultName1,
+                linkedinResult1,
+                snippetResult1 = '';
+            resultName1 = resultSplit1[0] + " " + resultSplit1[1];
+            linkedinResult1 = jsonResponse1['organic_results'][i]['link'];
+            snippetResult1 = jsonResponse1['organic_results'][i]['snippet'];
+            str = '"' + resultName1 + '"' + ',' + '"' + linkedinResult1 + '"' + ',' + '"' + snippetResult1.replace(/#/g, "") + '"';
+            csvStr1 += str + "\r\n";
+        }
+    }
+    return csvStr1;
+}
+
+var hiddenElement = document.createElement('a');
+hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvStr);
+hiddenElement.target = '_blank';
+hiddenElement.download = 'output.csv';	
+hiddenElement.click();
+alert("CSV Output Generated");
+}
+
+</script>  
+</body>
+</html>
