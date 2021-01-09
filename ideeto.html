@@ -1,33 +1,173 @@
 
-<html>  
-<head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</head>
+        <html>  
+        
+        <style>
+.myDiv {
+
+  text-align: left;
+  width: 200px;
+  margin-left: 50px;
+}
+</style>
+
 <body>
+<div class="myDiv">
 <form id="myForm" action="javascript:testFunction()">
 <table>
 <tr>
-<td>API Key : </td>
-<td><input type="text" id="apiKey" name="apiKey" value="3f53a47c756bee09932e8d0f6fc19b0a610a28dedcb3ee1720d3400d2a60be5d" style="width: 500%;"></td> <br/>
+  <td>Region      </td> 
+  <td>
+  <select input type="text" name="region" id="region">
+   <option value="www">All countries</option>
+   <option value="uk">United Kingdom</option>
+   <option value="www">United States</option>
+   <option value="ca">Canada</option>
+   <option value="af">Afghanistan</option>
+   <option value="al">Albania</option>
+   <option value="dz">Algeria</option>
+   <option value="ao">Angola</option>
+   <option value="ar">Argentina</option>
+   <option value="am">Armenia</option>
+   <option value="aw">Aruba</option>
+   <option value="au">Australia</option>
+   <option value="at">Austria</option>
+   <option value="bh">Bahrain</option>
+   <option value="bd">Bangladesh</option>
+   <option value="by">Belarus</option>
+   <option value="be">Belgium</option>
+   <option value="bz">Belize</option>
+   <option value="bo">Bolivia</option>
+   <option value="ba">Bosnia and Herzegovina</option>
+   <option value="br">Brazil</option>
+   <option value="bg">Bulgaria</option>
+   <option value="cl">Chile</option>
+   <option value="cn">China</option>
+   <option value="co">Colombia</option>
+   <option value="cr">Costa Rica</option>
+   <option value="hr">Croatia</option>
+   <option value="cy">Cyprus</option>
+   <option value="cz">Czech Republic</option>
+   <option value="dk">Denmark</option>
+   <option value="dm">Dominica</option>
+   <option value="do">Dominican Republic</option>
+   <option value="ec">Ecuador</option>
+   <option value="eg">Egypt</option>
+   <option value="sv">El Salvador</option>
+   <option value="ee">Estonia</option>
+   <option value="fk">Falkland Islands</option>
+   <option value="fi">Finland</option>
+   <option value="fr">France</option>
+   <option value="ge">Georgia</option>
+   <option value="de">Germany</option>
+   <option value="gh">Ghana</option>
+   <option value="gi">Gibraltar</option>
+   <option value="gr">Greece</option>
+   <option value="gt">Guatemala</option>
+   <option value="hk">Hong Kong</option>
+   <option value="hu">Hungary</option>
+   <option value="is">Iceland</option>
+   <option value="in">India</option>
+   <option value="id">Indonesia</option>
+   <option value="ir">Iran</option>
+   <option value="ie">Ireland</option>
+   <option value="il">Israel</option>
+   <option value="it">Italy</option>
+   <option value="jm">Jamaica</option>
+   <option value="jp">Japan</option>
+   <option value="jo">Jordan</option>
+   <option value="kz">Kazakhstan</option>
+   <option value="ke">Kenya</option>
+   <option value="kr">Korea</option>
+   <option value="kw">Kuwait</option>
+   <option value="la">Laos</option>
+   <option value="lv">Latvia</option>
+   <option value="lb">Lebanon</option>
+   <option value="lu">Luxembourg</option>
+   <option value="mk">Macedonia</option>
+   <option value="my">Malaysia</option>
+   <option value="mt">Malta</option>
+   <option value="mx">Mexico</option>
+   <option value="md">Moldova</option>
+   <option value="mc">Monaco</option>
+   <option value="me">Montenegro</option>
+   <option value="ma">Morocco</option>
+   <option value="mz">Mozambique</option>
+   <option value="mm">Myanmar</option>
+   <option value="np">Nepal</option>
+   <option value="nl">Netherlands</option>
+   <option value="nz">New Zealand</option>
+   <option value="ng">Nigeria</option>
+   <option value="no">Norway</option>
+   <option value="om">Oman</option>
+   <option value="pk">Pakistan</option>
+   <option value="pa">Panama</option>
+   <option value="pe">Peru</option>
+   <option value="ph">Philippines</option>
+   <option value="pl">Poland</option>
+   <option value="pt">Portugal</option>
+   <option value="pr">Puerto Rico</option>
+   <option value="qa">Qatar</option>
+   <option value="ro">Romania</option>
+   <option value="ru">Russian Federation</option>
+   <option value="st">Sao Tome and Principe</option>
+   <option value="sa">Saudi Arabia</option>
+   <option value="rs">Serbia</option>
+   <option value="sg">Singapore</option>
+   <option value="sk">Slovak Republic</option>
+   <option value="si">Slovenia</option>
+   <option value="za">South Africa</option>
+   <option value="es">Spain</option>
+   <option value="lk">Sri Lanka</option>
+   <option value="se">Sweden</option>
+   <option value="ch">Switzerland</option>
+   <option value="tw">Taiwan</option>
+   <option value="tz">Tanzania</option>
+   <option value="th">Thailand</option>
+   <option value="tg">Togo</option>
+   <option value="to">Tonga</option>
+   <option value="tt">Trinidad and Tobago</option>
+   <option value="tn">Tunisia</option>
+   <option value="tr">Turkey</option>
+   <option value="ug">Uganda</option>
+   <option value="ua">Ukraine</option>
+   <option value="ae">United Arab Emirates</option>
+   <option value="uy">Uruguay</option>
+   <option value="uz">Uzbekistan</option>
+   <option value="ve">Venezuela</option>
+   <option value="vn">Vietnam</option>
+   <option value="zw">Zimbabwe</option>
+</select>
+</td>
 </tr>
+
 <tr>
-<td>Search Query : </td>
-<td><input type="text" id="searchQuery" name="searchQuery" value="site:www.linkedin.com/in -inurl:dir &quot;series 67&quot; AND &quot;investment banking&quot;" style="width: 500%;"></td>
+<td  style="width: 10px;">Key      </td>
+<td><input type="text" id="apiKey" style="width: 600px;" name="apiKey" value="3f53a47c756bee09932e8d0f6fc19b0a610a28dedcb3ee1720d3400d2a60be5d" style="width: 500%;"></td> <br/>
+</tr>
+
+<tr>
+<td>Lexicons      </td>
+<td><input type="text" id="searchQuery"style="width: 600px;" name="searchQuery" value="&quot;series 67&quot; AND &quot;investment banking&quot;" style="width: 500%;"></td>
 </tr>
 </table>
 <button onclick="submitFunction()" style="margin-left: 28%;margin-top: 1%;margin-bottom: 1%;">Submit</button>
 </form>
+<br></br>
 <script>  
 
 function testFunction() { }
 
 function submitFunction() {
 
+
 var apiKey = document.forms['myForm'].elements['apiKey'].value.trim();
-var query = document.forms['myForm'].elements['searchQuery'].value.trim();
+
+
+var region = document.forms['myForm'].elements['region'].value.trim();
+
+var locationAndWebsite = "site:" + region + ".linkedin.com/in -inurl:dir";
+var queryAlone = document.forms['myForm'].elements['searchQuery'].value.trim();
+var query = queryAlone.concat(locationAndWebsite);
 var columnName = ["Name", "Linkedin URL", "Snippet Result"];
 var csvStr = columnName.join(",") + "\n";
 
@@ -100,5 +240,7 @@ alert("CSV Output Generated");
 }
 
 </script>  
+</div>
 </body>
+
 </html>
