@@ -8,6 +8,29 @@
   width: 200px;
   margin-left: 50px;
 }
+
+.progressBarLoader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin-left: 140%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 </style>
 
 <body>
@@ -150,97 +173,124 @@
 <td><input type="text" id="searchQuery"style="width: 600px;" name="searchQuery" value="&quot;series 67&quot; AND &quot;investment banking&quot;" style="width: 500%;"></td>
 </tr>
 </table>
-<button onclick="submitFunction()" style="margin-left: 28%;margin-top: 1%;margin-bottom: 1%;">Submit</button>
+<div class="progressBarLoader" id="progressBarId" style="display:none; margin-top:5%"></div>
+<button onclick="submitFunction()" id="submitButtonId" style="margin-left: 155%;margin-top: 1%;margin-bottom: 5%;">Submit</button>
 </form>
+</div>
+<p style="margin-left: 14%; display:none;" id="waitMessageId"><b>Please Wait.. Submitting and Processing .CSV File</b></p>
+<p style="margin-left: 20%; display:none;" id="successMessageId"><b>.CSV has been processed</b></p>
 <br></br>
-<script>  
+<script>
 
-function testFunction() { }
+var csvStr = '';
+
+function testFunction() {}
+
+function enableProgressbar() {
+    var progressBarId = document.getElementById("progressBarId");
+    var submitButtonId = document.getElementById("submitButtonId");
+    var waitMessageId = document.getElementById("waitMessageId");
+    submitButtonId.style.display = "none";
+    waitMessageId.style.display = "block";
+    progressBarId.style.display = "block";
+}
 
 function submitFunction() {
 
+    enableProgressbar();
 
-var apiKey = document.forms['myForm'].elements['apiKey'].value.trim();
+    var apiKey = document.forms['myForm'].elements['apiKey'].value.trim();
 
+    var region = document.forms['myForm'].elements['region'].value.trim();
 
-var region = document.forms['myForm'].elements['region'].value.trim();
+    var locationAndWebsite = "site:" + region + ".linkedin.com/in -inurl:dir";
+    var queryAlone = document.forms['myForm'].elements['searchQuery'].value.trim();
+    var query = queryAlone.concat(locationAndWebsite);
 
-var locationAndWebsite = "site:" + region + ".linkedin.com/in -inurl:dir";
-var queryAlone = document.forms['myForm'].elements['searchQuery'].value.trim();
-var query = queryAlone.concat(locationAndWebsite);
-var columnName = ["Name", "Linkedin URL", "Snippet Result"];
-var csvStr = columnName.join(",") + "\n";
-
-totalRecords = 0;
-
-csvStr1 = myFunction(1);
-csvStr += csvStr1;
-
-pageCnt = 51;
-
-totalPages = totalRecords / 50;
-
-for (j = 1; j < totalPages; j++) {
-    csvStr1 = myFunction(pageCnt);
-	if(csvStr1 == '') {
-		break;
-	}
-    csvStr += csvStr1;
-	pageCnt+=50;
+    myFunction(1, query, apiKey, 1);
 }
 
-function myFunction(pageCount) {
-	var url = '';
-	
-	if (pageCount === 1) {
-	  url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
-	}
-	else {
-	  url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
-	}
-	
-	csvStr1 = '';
-    var xmlHttp1 = new XMLHttpRequest();
-    xmlHttp1.open("GET", url, false);
-	xmlHttp1.setRequestHeader('Access-Control-Allow-Origin', '*');
-	xmlHttp1.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xmlHttp1.send();
-	if(xmlHttp1.status === 500) {
-		return csvStr1;
-	}
-    jsonResponse1 = JSON.parse(xmlHttp1.responseText);
+function myFunction(pageCount, query, apiKey, totalPageFlag) {
+
+    var url = '';
 
     if (pageCount === 1) {
-        totalRecords = jsonResponse1.search_information.total_results;
+        url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
+    } else {
+        url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
     }
 
-    if (typeof jsonResponse1['organic_results'] !== 'undefined' && jsonResponse1['organic_results'].length > 0) {
-		for (i = 0; i < jsonResponse1['organic_results'].length; i++) {
-            result1 = jsonResponse1['organic_results'][i]['title'];
-            resultSplit1 = result1.split(" ");
-            var resultName1,
-                linkedinResult1,
-                snippetResult1 = '';
-            resultName1 = resultSplit1[0] + " " + resultSplit1[1];
-            linkedinResult1 = jsonResponse1['organic_results'][i]['link'];
-            snippetResult1 = jsonResponse1['organic_results'][i]['snippet'];
-            str = '"' + resultName1 + '"' + ',' + '"' + linkedinResult1 + '"' + ',' + '"' + snippetResult1.replace(/#/g, "") + '"';
-            csvStr1 += str + "\r\n";
+    var csvStr1 = '';
+    var xmlHttp1 = new XMLHttpRequest();
+
+    var handleRequestStateChange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var progressBarId = document.getElementById("progressBarId");
+            progressBarId.style.display = "block";
+
+            jsonResponse1 = JSON.parse(this.responseText);
+
+            if (pageCount === 1 && typeof jsonResponse1 !== 'undefined') {
+                totalRecords = jsonResponse1.search_information.total_results;
+            }
+
+            if (typeof jsonResponse1 !== 'undefined' && typeof jsonResponse1['organic_results'] !== 'undefined' && jsonResponse1['organic_results'].length > 0) {
+                for (i = 0; i < jsonResponse1['organic_results'].length; i++) {
+                    result1 = jsonResponse1['organic_results'][i]['title'];
+                    resultSplit1 = result1.split(" ");
+                    var resultName1,
+                    linkedinResult1,
+                    snippetResult1 = '';
+                    resultName1 = resultSplit1[0] + " " + resultSplit1[1];
+                    linkedinResult1 = jsonResponse1['organic_results'][i]['link'];
+                    snippetResult1 = jsonResponse1['organic_results'][i]['snippet'];
+                    str = '"' + resultName1 + '"' + ',' + '"' + linkedinResult1 + '"' + ',' + '"' + snippetResult1.replace(/#/g, "") + '"';
+                    csvStr1 += str + "\r\n";
+                }
+            }
+            valueCallBack(csvStr1, pageCount, totalRecords, query, apiKey);
         }
     }
-    return csvStr1;
+
+    xmlHttp1.open("GET", url, true);
+    xmlHttp1.onreadystatechange = handleRequestStateChange;
+    xmlHttp1.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xmlHttp1.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xmlHttp1.send(null);
 }
 
-var hiddenElement = document.createElement('a');
-hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvStr);
-hiddenElement.target = '_blank';
-hiddenElement.download = 'output.csv';	
-hiddenElement.click();
-alert("CSV Output Generated");
+function valueCallBack(csvStr1, pageCount, totalPageFlag, query, apiKey) {
+
+    if (pageCount === 1) {
+        var columnName = ["Name", "Linkedin URL", "Snippet Result"];
+        csvStr = columnName.join(",") + "\n";
+    }
+
+    csvStr += csvStr1;
+
+    if ((pageCount === 1 && totalPageFlag <= 50) || pageCount > totalPageFlag) {
+        downloadCsv(csvStr);
+    } else {
+        pageCnt = 50 + pageCount;
+        csvStr1 = myFunction(pageCnt, query, apiKey, totalPageFlag);
+    }
+}
+
+function downloadCsv(csvStr) {
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvStr);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'output.csv';
+    hiddenElement.click();
+    var progressBarId = document.getElementById("progressBarId");
+    var submitButtonId = document.getElementById("submitButtonId");
+    var waitMessageId = document.getElementById("waitMessageId");
+    submitButtonId.style.display = "block";
+    waitMessageId.style.display = "none";
+    progressBarId.style.display = "none";
+    alert(".CSV has been generated");
 }
 
 </script>  
-</div>
 </body>
-
 </html>
