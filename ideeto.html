@@ -179,10 +179,12 @@
 </div>
 <p style="margin-left: 14%; display:none;" id="waitMessageId"><b>Please Wait.. Submitting and Processing .CSV File</b></p>
 <p style="margin-left: 20%; display:none;" id="successMessageId"><b>.CSV has been processed</b></p>
+<p style="margin-left: 22%; display:none;" id="errorMessageId"><b>Error occurred</b></p>
 <br></br>
 <script>
 
 var csvStr = '';
+var linkedinCsvStr = '';
 
 function testFunction() {}
 
@@ -221,6 +223,7 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
     }
 
     var csvStr1 = '';
+	var linkedinCsvStr1 = '';
     var xmlHttp1 = new XMLHttpRequest();
 
     var handleRequestStateChange = function () {
@@ -245,11 +248,15 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
                     linkedinResult1 = jsonResponse1['organic_results'][i]['link'];
                     snippetResult1 = jsonResponse1['organic_results'][i]['snippet'];
                     str = '"' + resultName1 + '"' + ',' + '"' + linkedinResult1 + '"' + ',' + '"' + snippetResult1.replace(/#/g, "") + '"';
+					linkedinStr = '"' + linkedinResult1 + '"';
                     csvStr1 += str + "\r\n";
+					linkedinCsvStr1 += linkedinStr + "\r\n";
                 }
             }
-            valueCallBack(csvStr1, pageCount, totalRecords, query, apiKey);
-        }
+            valueCallBack(csvStr1, pageCount, totalRecords, query, apiKey, linkedinCsvStr1);
+        } else if (this.status !== 200) {
+			showErrorMessage();
+		}
     }
 
     xmlHttp1.open("GET", url, true);
@@ -259,28 +266,60 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
     xmlHttp1.send(null);
 }
 
-function valueCallBack(csvStr1, pageCount, totalPageFlag, query, apiKey) {
+function valueCallBack(csvStr1, pageCount, totalPageFlag, query, apiKey, linkedinCsvStr1) {
 
     if (pageCount === 1) {
         var columnName = ["Name", "Linkedin URL", "Snippet Result"];
         csvStr = columnName.join(",") + "\n";
+		
+		var linkedinColumnName = ["Linkedin URL"];
+        linkedinCsvStr = linkedinColumnName.join(",") + "\n";
     }
 
     csvStr += csvStr1;
+	linkedinCsvStr += linkedinCsvStr1;
 
     if ((pageCount === 1 && totalPageFlag <= 50) || pageCount > totalPageFlag) {
         downloadCsv(csvStr);
+		downloadLinkedinCsv(linkedinCsvStr);
+		var successMessageId = document.getElementById("successMessageId");
+		successMessageId.style.display = "block";
+		setTimeout(function(){
+			successMessageId.innerHTML = '';
+		}, 4000);
     } else {
         pageCnt = 50 + pageCount;
         csvStr1 = myFunction(pageCnt, query, apiKey, totalPageFlag);
     }
 }
 
+function showErrorMessage() {
+	var progressBarId = document.getElementById("progressBarId");
+    var submitButtonId = document.getElementById("submitButtonId");
+    var waitMessageId = document.getElementById("waitMessageId");
+	var errorMessageId = document.getElementById("errorMessageId");
+    errorMessageId.style.display = "block";	
+	submitButtonId.style.display = "block";
+    waitMessageId.style.display = "none";
+    progressBarId.style.display = "none";
+	setTimeout(function(){
+		errorMessageId.innerHTML = '';
+	}, 4000);
+}
+
 function downloadCsv(csvStr) {
     var hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvStr);
     hiddenElement.target = '_blank';
-    hiddenElement.download = 'output.csv';
+    hiddenElement.download = 'Output.csv';
+    hiddenElement.click();
+}
+
+function downloadLinkedinCsv(linkedinCsvStr) {
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(linkedinCsvStr);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'LinkedInUrlsOutput.csv';
     hiddenElement.click();
     var progressBarId = document.getElementById("progressBarId");
     var submitButtonId = document.getElementById("submitButtonId");
@@ -288,7 +327,7 @@ function downloadCsv(csvStr) {
     submitButtonId.style.display = "block";
     waitMessageId.style.display = "none";
     progressBarId.style.display = "none";
-    alert(".CSV has been generated");
+    alert("Output.csv & LinkedInUrlsOutput.csv has been generated");
 }
 
 </script>  
