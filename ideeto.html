@@ -1,9 +1,6 @@
 
         <html>  
-            <iframe style="margin-left: 14%; border:0px #ffffff none;" src="https://cors-anywhere.herokuapp.com/corsdemo" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400px" width="600px" allowfullscreen></iframe>
         
-        
-    
         <style>
 .myDiv {
 
@@ -220,9 +217,9 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
     var url = '';
 
     if (pageCount === 1) {
-        url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
+        url = 'https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
     } else {
-        url = 'https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
+        url = 'https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
     }
 
     var csvStr1 = '';
