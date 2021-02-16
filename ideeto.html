@@ -165,7 +165,7 @@
 
 <tr>
 <td  style="width: 10px;">Key      </td>
-<td><input type="text" id="apiKey" style="width: 600px;" name="apiKey" value="3f53a47c756bee09932e8d0f6fc19b0a610a28dedcb3ee1720d3400d2a60be5d" style="width: 500%;"></td> <br/>
+<td><input type="text" id="apiKey" style="width: 600px;" name="apiKey" value="9bbb6a540dfdb1ec272e1e67cb2c08d6fe51c1c4f97eb83ff3bf40387767cf2a" style="width: 500%;"></td> <br/>
 </tr>
 
 <tr>
@@ -226,6 +226,7 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
 	var linkedinCsvStr1 = '';
     var xmlHttp1 = new XMLHttpRequest();
 
+
     var handleRequestStateChange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var progressBarId = document.getElementById("progressBarId");
@@ -261,8 +262,6 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
 
     xmlHttp1.open("GET", url, true);
     xmlHttp1.onreadystatechange = handleRequestStateChange;
-    xmlHttp1.setRequestHeader('Access-Control-Allow-Origin', '*');
-    xmlHttp1.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xmlHttp1.send(null);
 }
 
