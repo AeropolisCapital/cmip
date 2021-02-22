@@ -1,6 +1,7 @@
 
         <html>  
-        
+
+    
         <style>
 .myDiv {
 
@@ -165,7 +166,7 @@
 
 <tr>
 <td  style="width: 10px;">Key      </td>
-<td><input type="text" id="apiKey" style="width: 600px;" name="apiKey" value="9bbb6a540dfdb1ec272e1e67cb2c08d6fe51c1c4f97eb83ff3bf40387767cf2a" style="width: 500%;"></td> <br/>
+<td><input type="text" id="apiKey" style="width: 600px;" name="apiKey" value="Follow Step 1 and Enter Your Key Here." style="width: 500%;"></td> <br/>
 </tr>
 
 <tr>
@@ -217,15 +218,14 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
     var url = '';
 
     if (pageCount === 1) {
-        url = 'https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
+        url = 'https://corskiller.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&q=" + encodeURIComponent(query);
     } else {
-        url = 'https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
+        url = 'https://corskiller.herokuapp.com/https://serpapi.com/search.json?cc=ca&count=50&device=desktop&engine=bing&api_key=' + apiKey + "&first=" + pageCount + "&q=" + encodeURIComponent(query);
     }
 
     var csvStr1 = '';
 	var linkedinCsvStr1 = '';
     var xmlHttp1 = new XMLHttpRequest();
-
 
     var handleRequestStateChange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -262,6 +262,8 @@ function myFunction(pageCount, query, apiKey, totalPageFlag) {
 
     xmlHttp1.open("GET", url, true);
     xmlHttp1.onreadystatechange = handleRequestStateChange;
+    xmlHttp1.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xmlHttp1.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xmlHttp1.send(null);
 }
 
